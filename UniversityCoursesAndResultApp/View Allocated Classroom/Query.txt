@@ -1,0 +1,8 @@
+SELECT     D.Department_Id, C.Course_Code, C.Course_Name, R.Name AS RoomName, ACR.TimeFrom, ACR.TimeTo, ACR.Status, day.Name AS DayName
+FROM         dbo.t_day AS day INNER JOIN
+                      dbo.t_allocateClassroom AS ACR ON day.Id = ACR.DayId RIGHT OUTER JOIN
+                      dbo.t_courses AS C LEFT OUTER JOIN
+                      dbo.t_department AS D ON C.Department_Id = D.Department_Id ON ACR.CourseId = C.Course_Id LEFT OUTER JOIN
+                      dbo.t_room AS R ON R.Id = ACR.RoomId
+WHERE     (ACR.Status IS NULL) OR
+                      (ACR.Status = 'true')

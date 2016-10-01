@@ -1,0 +1,136 @@
+﻿@using UniversityCoursesAndResultApp.Models
+
+@{
+    ViewBag.Title = "Save";
+    var semesters = ViewBag.Semesters;
+    var departments = ViewBag.Departments;
+     
+}
+
+<!Doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Save Course</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet"/>
+    <style>
+        label.error {
+            color: red;
+        }
+          #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+<div class="container container-fluid">
+    <h3 class="text-center">Save Course</h3><hr/>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <form class="form-horizontal" method="POST" id="saveCourse">
+                <div class="form-group">
+                    <label for="Code" class="col-sm-2 control-label">Code</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="courseCode" name="Code" placeholder="Code"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="courseName" name="Name" placeholder="Name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="credit" class="col-sm-2 control-label">Credit</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="credit" name="Credit" placeholder="Credit"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label">Description</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" rows="3" id="description" name="Description" placeholder="Description"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="department" class="col-sm-2 control-label">Department</label>
+                    <div class="col-sm-10">
+                        <select id="departmentList" style="height: 35px" name="DepartmentId" required>
+                            <option value="">...........Select Department........</option>
+                            @foreach (Department department in departments)
+                            {
+                                <option value="@department.Id">@department.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="semester" class="col-sm-2 control-label">Semester</label>
+                    <div class="col-sm-10">
+                        <select id="semesterList"style="height: 35px" name="SemesterId">
+                            <option value="">....Select Semester....</option>
+                            @foreach (Semester semester in semesters)
+                            {
+                                <option value="@semester.Id">@semester.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-success" id="saveButton">Save</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <label class="text-danger">@ViewBag.ErrorMessage</label>
+                        <label class="text-success">@ViewBag.SuccessMessage</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.1.0.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#saveCourse").validate({
+            rules: {
+                Name: "required",
+                Code: {
+                    required: true,
+                    minlength: 5
+
+                },
+                Credit: "required",
+                Description: "required",
+                DepartmentId: "required",
+                SemesterId: "required",
+
+                messages: {
+                    Name: "Please Enter Course Name",
+                    Code: {
+                        required: "Please Enter Course Code",
+                        minlength: "Code must be 5 characters long"
+
+                    },
+                    Credit: "Please Enter Course credit",
+                    Description: "Please Enter Course description",
+                    DepartmentId: "Please Select a depertment",
+                    SemesterId: "Please Select a semester"
+
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
+

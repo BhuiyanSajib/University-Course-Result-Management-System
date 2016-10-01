@@ -1,0 +1,67 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UnassignCourse</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+     <style>
+        #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+<div >
+    <h3 class="text-center" style="padding-top: 30px;">Unassign All courses</h3><hr/>
+    <table>
+        <tr >
+            <td style="padding-left: 600px">
+                <input type="submit" value="Unassign Courses" id="unassignCourse" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-primary"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Alert!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to unassign all courses?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="x1">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.0.min.js"></script>
+
+<script>
+    $("#x1").click(function() {
+        $.ajax({
+            url: '@Url.Action("UnassignAllCourse", "UnassignCourse")',
+            contentType: "application/json; charset=utf-8",
+        });
+    });
+</script>
+</body>
+</html>

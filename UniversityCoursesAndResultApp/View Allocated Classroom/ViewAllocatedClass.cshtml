@@ -1,0 +1,94 @@
+﻿@using UniversityCoursesAndResultApp.Models
+@using System.Web.UI.WebControls
+@{
+    Layout = null;
+    List<Department> departments = ViewBag.departments;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewAllocatedClass</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <h4>ViewAllocatedClassRoom</h4>
+    <hr />
+    <div align="center">
+        <table>
+            <tr>
+                <td><label for="DepartmentId"></label></td>
+                <td>
+                    <select name="DepartmentId" id="departmentId">
+                        <option value="null">Pls select a department</option>
+                        @foreach (Department aDepartment in departments)
+                        {
+                            <option value="@aDepartment.Id">@aDepartment.Name</option>
+
+                        }
+                    </select>
+                </td>
+
+            </tr>
+        </table>
+        <table id="viewAllocateRoomTable" class="table table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Schedule Info</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleInformation">
+            
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+  
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+            $("#departmentId").change(function () {
+                var deptId = $("#departmentId").val();
+                
+                $('#scheduleInformation').empty();
+                var json = { departmentId: deptId };
+                var previousValue = "";
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetAllocatedRoomViewByDepartmentId", "AllocateClassroom")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    $('#scheduleInformation').append('<tr><th>' + "Course Code" + '</th><th>' + "Name" + '</th><th>' + "Schedule Info" + '</th></tr>');
+                    $.each(data, function (key, value) {
+                        if (value.RoomName == "") {
+                            value.RoomName = "Not Scheduled Yet";
+                            $("#scheduleInformation").append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>' + value.RoomName + '</td></tr>');
+                        }
+                        else {
+                            if (previousValue != value.CourseCode) {
+                                $("#scheduleInformation").append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>R. No : ' + value.RoomName + ', ' + value.Day + ', ' + value.TimeFrom + " - " + value.TimeTo);
+                            } else {
+                                $("#scheduleInformation td:eq(2)").append('<br/>R. No : ' + value.RoomName + ', ' + value.Day + ', ' + value.TimeFrom + " - " + value.TimeTo);
+                            }
+                            previousValue = value.CourseCode;
+                        }
+                    });
+                }
+            });
+           });
+            });
+    </script>
+    
+</body>
+</html>

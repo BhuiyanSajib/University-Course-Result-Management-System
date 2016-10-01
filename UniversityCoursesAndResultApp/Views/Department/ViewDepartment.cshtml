@@ -1,0 +1,49 @@
+﻿
+@using UniversityCoursesAndResultApp.Models
+@*@model UniversityCoursesAndResultApp.Models.Department*@
+@{
+    ViewBag.Title = "ViewDepartment";
+    var departments = ViewBag.departments;
+}
+
+<!Doctype html>
+<head>
+    <title>View department</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet"/>
+      <style>
+        #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+<div class="container container-fluid">
+    <h3 class="text-center"><strong>Department</strong>
+    </h3>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-8">
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Department Code</th>
+                    <th>Department Name</th>
+                </tr>
+                @foreach (Department department in departments)
+                {
+                    <tr>
+                        <td>@department.Code</td>
+                        <td>@department.Name</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+</body>

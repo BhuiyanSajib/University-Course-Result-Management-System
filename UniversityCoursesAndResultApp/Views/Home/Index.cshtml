@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <h3 class="text-center">University Course and Result Management System</h3><hr/>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+
+            <table class="table table-striped">
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("SaveDepartment", "Department")' "><h4>Save Department</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("ViewDepartment", "Department")' "><h4>View Department</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("Save", "Course")' "><h4>Save Course</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("SaveTeacher", "Teacher")' "><h4>Save Teacher</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("AssignCourse", "AssignCourseToTeacher")' "><h4>Course Assign To Teacher</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("CourseStatics", "CourseStatics")' "><h4>View Course Statics</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("RegisterStudent", "StudentRegistration")' "><h4>Register Student</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("AllocateClassroom", "AllocateClassroom")' "><h4>Allocate Classroom</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("ViewAllocatedClass", "AllocateClassroom")' "><h4>Class Schedule and Room Allocation Information</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("EnrollStudent", "StudentRegistration")' "><h4>Enroll in a Course</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("SaveResult", "Result")' "><h4>Save Student Result</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("ViewResult", "Result")' "><h4>View Result</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("UnassignCourse", "UnassignCourse")' "><h4>Unassign All Courses</h4></a></td>
+
+                </tr>
+                <tr>
+
+                    <td class="text-center"><a style="color: darkcyan" onclick=" window.location.href = '@Url.Action("UnallocateClassRoom", "UnallocateRoom")' "><h4>Unallocate All Classroom</h4></a></td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

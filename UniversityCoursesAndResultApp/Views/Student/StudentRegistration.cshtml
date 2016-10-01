@@ -1,0 +1,99 @@
+﻿@using System.Web.UI.WebControls
+@using UniversityCoursesAndResultApp.Models
+@{
+
+    List<Department> departments = ViewBag.departments;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StudentRegistration</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet"/>
+       <style>
+        #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+<div class="container container-fluid">
+    <h3 class="text-center">Register student</h3><hr/>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <form class="form-horizontal" method="post" id="saveStudent">
+                <div class="form-group">
+                    <label for="Name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="studentName" name="StudentName" placeholder="Name"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="studentEmail" name="Email" placeholder="Email"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact" class="col-sm-2 control-label">Contact No</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="contactNum" name="ContactNo" placeholder="Contact No"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regDate" class="col-sm-2 control-label">Date</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="date" name="ContactNo"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="col-sm-2 control-label">Address</label>
+                    <div class="col-sm-10">
+                        <textarea rows="3" class="form-control" placeholder="Address" name="Address" id="address"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="department" class="col-sm-2 control-label">Department</label>
+                    <div class="col-sm-10">
+                        <select id="departmentList" style="height: 35px; width: 100%" name="DepartmentId">
+                            <option value="">...........Select Department........</option>
+                            @foreach (Department department in departments)
+                            {
+                                <option value="@department.Id">@department.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10" style="padding-left: 395px">
+                        <button type="submit" class="btn btn-success" id="saveButton">Register</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <label class="text-danger">@ViewBag.ErrorMessage</label>
+                        <label class="text-success">@ViewBag.SuccessMessage</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

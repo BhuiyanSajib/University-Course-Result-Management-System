@@ -1,0 +1,172 @@
+﻿@using System.Web.UI.WebControls
+@using UniversityCoursesAndResultApp.Models
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EnrollStudent</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+      <style>
+        label.error {
+            color: red;
+        }
+         #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+<div>
+    <form id="enrollForm" method="POST">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group" align="center">
+            <table class="dataTables_sizing">
+                <tr>
+                    <td><label for="StudentId">Student Reg. No.</label></td>
+                    <td>
+                        <select id="StudentId" name="StudentId">
+                            <option value="">Pls select a Registration name</option>
+                            @foreach (RegisterStudent aStudent in ViewBag.StudentList)
+                            {
+                                <option value="@aStudent.Id">@aStudent.Registration_Number</option>
+                            }
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="StudentName">Name</label></td>
+                    <td><input type="text" class="disabled" readonly="readonly" id="StudentName" name="StudentName"/></td>
+                </tr>
+                <tr>
+                    <td><label for="StudentEmail">Email</label></td>
+                    <td><input type="text" class="disabled" readonly="readonly" id="StudentEmail" name="StudentEmail"/></td>
+                </tr>
+                <tr>
+                    <td><label for="DepartmentId">Department</label></td>
+
+                    <td><input type="text" class="disabled" readonly="readonly" id="DepartmentId" name="DepartmentId"/></td>
+
+                    @*<td><input id="Code" name="DepartmentId" type="text" readonly="readonly" /></td>*@
+                </tr>
+                <tr>
+                    <td><label for="CourseId">Select Course</label></td>
+                    <td>
+                        <select id="CourseId" name="CourseId"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="EnrollDate">Date</label></td>
+                    <td>
+                        <div class="input-group date" data-provide="datepicker">
+                            <input type="date" id="EnrollDate" name="EnrollDate" class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Enroll" class="btn btn-danger"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+    <div>
+        @if (ViewBag.message != null)
+        {
+            <p style="color: green">@ViewBag.message</p>
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script>
+
+        $("#enrollForm").validate({
+            rules: {
+                StudentId: {
+                    required: true
+                },
+                StudentName: { required: true },
+                StudentEmail: { required: true },
+                Code: { required: true },
+                CourseId: { required: true },
+                EnrollDate: { required: true }
+            },
+            messages: {
+                StudentId: {
+                    required: "Please select a Department"
+                },
+                StudentName: "",
+                StudentEmail: "",
+                Code: "",
+                CourseId: "Please select a Course",
+                EnrollDate: "Please enter a date"
+            }
+        });
+        $(document).ready(function() {
+            $("#StudentId").change(function() {
+                $("#StudentName").val('');
+                $("#StudentEmail").val('');
+                $("#DepartmentId").val('');
+                var stdntId = $("#StudentId").val();
+                var json = { studentId: stdntId };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetStudentInfoByStudentId", "StudentRegistration")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function(data) {
+                        //alert(value.DepartmentId);
+                        $.each(data, function(key, value) {
+
+                            //alert(key);
+                            $("#StudentName").val(value.name);
+                            $("#StudentEmail").val(value.email);
+                            $("#DepartmentId").val(value.department);
+
+                        });
+                    }
+                });
+            });
+            $("#StudentId").change(function() {
+                var stdntId = $("#StudentId").val();
+                $("#CourseId").empty();
+
+                var json = { studentId: stdntId };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCoursesByStudentId", "StudentRegistration")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    datatype: 'json',
+                    success: function(data) {
+                        $("#CourseId").append('<option value="">--Select Course-- </option>');
+                        $.each(data, function(key, value) {
+                            $("#CourseId").append('<option value=' + value.Value + '>' + value.Text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

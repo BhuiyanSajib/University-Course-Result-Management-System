@@ -1,0 +1,100 @@
+﻿@using UniversityCoursesAndResultApp.Models
+@using UniversityCoursesAndResultApp.Models.ViewModel
+@using System.Web.UI.WebControls
+@{
+    Layout = null;
+    List<Department> departments = ViewBag.departments;
+    List<ViewCourseStatics> courseStaticses = ViewBag.coursestaticsbyDeptId;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CourseStatics</title>
+     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet"/>
+       <style>
+        #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+    <h4>View Course Statics</h4>
+    <hr/>
+    <div align="center">
+        <table>
+            <tr>
+                <td><label for="DepartmentId">Department</label></td>
+                <td>
+                    <select name="DepartmentId" id="DepartmentId">
+                        <option value="">Pls select a department</option>
+                        @foreach (Department aDepartment in departments)
+                        {
+                            <option value="@aDepartment.Id">@aDepartment.Name</option>
+
+                        }
+                    </select>
+                </td>
+
+            </tr>
+        </table>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name/Title</th>
+                <th>Semester</th>
+                <th>Assign To</th>
+            </tr>
+            </thead>
+            <tbody id="courseStatics">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.0.min.js"></script>
+<script>
+    $("#DepartmentId").change(function() {
+        var deptId = $("#DepartmentId").val();
+        
+        
+        var json = {
+            departmentId: deptId
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCourseStatics", "CourseStatics")',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(json),
+            success: function(data) {
+               
+                $.each(data, function(key, value) {
+                    if (value.TeacherName == "") {
+                        value.TeacherName = "Not Assigned Yet";
+                        $("#courseStatics").append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>' + value.SemesterName + '</td><td>' + value.TeacherName + '</td></tr>');
+                    } else {
+
+                        $("#courseStatics").append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>' + value.SemesterName + '</td><td>' + value.TeacherName + '</td></tr>');
+
+
+                    }
+
+                });
+            }
+        });
+    });
+
+            </script>
+
+</body>
+</html>

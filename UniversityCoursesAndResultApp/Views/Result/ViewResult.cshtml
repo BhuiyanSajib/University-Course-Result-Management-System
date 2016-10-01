@@ -1,0 +1,166 @@
+﻿@using UniversityCoursesAndResultApp.Models
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewResult</title>
+    <style>
+        label.error {
+            color: red;
+        }
+          #home-bar {
+            height: 60px;
+            width: 100%;
+            background-color: darkcyan;
+        }
+    </style>
+  
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+</head>
+<body>
+<div>
+    <div id="home-bar">
+    <h3 class="text-center" style="padding-top: 15px"><a onclick=" window.location.href = '@Url.Action("Index", "Home")' " style="color: wheat" >Home</a></h3>
+</div>
+    <form id="enrollForm" method="POST" style="margin-top: 10px">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group" align="center">
+            <table class="dataTables_sizing">
+                <tr>
+                    <td><label for="StudentId">Student Reg. No.</label></td>
+                    <td>
+                        <select id="StudentId" name="StudentId">
+                            <option value="">Pls select a Registration name</option>
+                            @foreach (RegisterStudent aStudent in ViewBag.StudentList)
+                            {
+                                <option value="@aStudent.Id">@aStudent.Registration_Number</option>
+                            }
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="StudentName">Name</label></td>
+                    <td><input type="text" class="disabled" readonly="readonly" id="StudentName" name="StudentName"/></td>
+                </tr>
+                <tr>
+                    <td><label for="StudentEmail">Email</label></td>
+                    <td><input type="text" class="disabled" readonly="readonly" id="StudentEmail" name="StudentEmail"/></td>
+                </tr>
+                <tr>
+                    <td><label for="Code">Department</label></td>
+                    <td><input id="Code" name="Code" type="text" readonly="readonly"/></td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input id="submit" name="submit" type="submit" value="Make PDF" class="btn btn-success"/>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table id="myTable" class="table table-responsive table-hover">
+        <thead>
+        <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Grade</td>
+
+        </tr>
+        </thead>
+        <tbody id="tablebody"></tbody>
+    </table>
+
+    <div>
+        @if (ViewBag.message != null)
+        {
+            <p style="color: green">@ViewBag.message</p>
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <script>
+
+        $("#enrollForm").validate({
+            rules: {
+                StudentId: {
+                    required: true
+                },
+                StudentName: { required: true },
+                StudentEmail: { required: true },
+                Code: { required: true },
+            },
+            messages: {
+                StudentId: {
+                    required: "Please select a Department"
+                },
+                StudentName: "",
+                StudentEmail: "",
+                Code: "",
+            }
+        });
+        $(document).ready(function() {
+            $("#StudentId").change(function() {
+                $("#StudentName").val('');
+                $("#StudentEmail").val('');
+                $("#Code").val('');
+                var stdntId = $("#StudentId").val();
+                var json = { studentId: stdntId };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetStudentInfoByStudentId", "Result")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function(data) {
+                        //alert(value.DepartmentId);
+                        $.each(data, function(key, value) {
+
+                            //alert(key);
+                            $("#StudentName").val(value.name);
+                            $("#StudentEmail").val(value.email);
+                            $("#Code").val(value.department);
+
+                        });
+                    }
+                });
+            });
+            $("#StudentId").change(function() {
+                $("#tablebody").empty();
+                var stdId = $("#StudentId").val();
+                var json = {
+                    studentId: stdId
+                };
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("GetCourseInfoById", "Result")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function(data) {
+                        $.each(data, function(key, value) {
+                            if (value.Grdae === '') {
+                                value.Grdae = 'Not Graded Yet';
+                            }
+                            $("#tablebody").append('<tr><td>' + value.CourseCode + '</td><td>' + value.CourseName + '</td><td>' + value.Grade + '</td></tr>');
+                        });
+                        $("#myTable").show();
+                        $("#myTable").dataTable();
+                    }
+                });
+            });
+
+        });
+    </script>
+</div>
+</body>
+</html>
